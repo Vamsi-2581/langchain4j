@@ -34,7 +34,8 @@ class OpenAiStreamingChatModelInBandErrorTest {
             "data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Hello\"}}]}\n\n";
     private static final String ERROR_CHUNK = "data: {\"error\":{\"message\":\"Service is too busy\"}}\n\n";
     private static final String ERROR_CHUNK_WITH_CHOICES =
-            "data: {\"id\":\"cmpl-abc123\",\"error\":{\"code\":\"server_error\",\"message\":\"Provider disconnected unexpectedly\"},"
+            "data: {\"id\":\"cmpl-abc123\",\"error\":{\"code\":\"server_error\","
+                    + "\"message\":\"Provider disconnected unexpectedly\"},"
                     + "\"choices\":[{\"index\":0,\"delta\":{\"content\":\"\"},\"finish_reason\":\"error\"}]}\n\n";
     private static final String DONE = "data: [DONE]\n\n";
 
