@@ -99,7 +99,7 @@ public class OpenAiStreamingResponseBuilder {
                 ChatCompletionResponse parsedResponse = parsedAndRawResponse.parsedResponse();
                 if (parsedResponse == null
                         || isNullOrEmpty(parsedResponse.choices())
-                        || rawServerSentEvent.data().contains("\\"error\\"")) {
+                        || rawServerSentEvent.data().contains("\"error\"")) {
                     String errorMessage = providerErrorMessageFrom(rawServerSentEvent.data());
                     if (errorMessage != null) {
                         providerErrorMessage.compareAndSet(null, errorMessage);
