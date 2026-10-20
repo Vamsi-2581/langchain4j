@@ -33,6 +33,9 @@ class OpenAiStreamingChatModelInBandErrorTest {
     private static final String CONTENT_CHUNK =
             "data: {\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Hello\"}}]}\n\n";
     private static final String ERROR_CHUNK = "data: {\"error\":{\"message\":\"Service is too busy\"}}\n\n";
+    private static final String ERROR_CHUNK_WITH_CHOICES =
+            "data: {\"id\":\"cmpl-abc123\",\"error\":{\"code\":\"server_error\",\"message\":\"Provider disconnected unexpectedly\"},"
+                    + "\"choices\":[{\"index\":0,\"delta\":{\"content\":\"\"},\"finish_reason\":\"error\"}]}\n\n";
     private static final String DONE = "data: [DONE]\n\n";
 
     enum Api {
@@ -79,6 +82,17 @@ class OpenAiStreamingChatModelInBandErrorTest {
 
         // when-then
         assertFailsWith(chat(api), "Chat completion failed: Service is too busy");
+    }
+
+    @ParameterizedTest
+    @EnumSource(Api.class)
+    void should_fail_when_provider_error_is_sent_in_a_chunk_with_choices(Api api) {
+
+        // given
+        respondWith(CONTENT_CHUNK + ERROR_CHUNK_WITH_CHOICES + DONE);
+
+        // when-then
+        assertFailsWith(chat(api), "Chat completion failed: Provider disconnected unexpectedly");
     }
 
     @ParameterizedTest
