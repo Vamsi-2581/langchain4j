@@ -96,11 +96,12 @@ public class OpenAiStreamingResponseBuilder {
             ServerSentEvent rawServerSentEvent = parsedAndRawResponse.rawServerSentEvent();
             if (rawServerSentEvent != null) {
                 rawServerSentEvents.add(rawServerSentEvent);
+                String rawEventData = rawServerSentEvent.data();
                 ChatCompletionResponse parsedResponse = parsedAndRawResponse.parsedResponse();
                 if (parsedResponse == null
                         || isNullOrEmpty(parsedResponse.choices())
-                        || rawServerSentEvent.data().contains("\"error\"")) {
-                    String errorMessage = providerErrorMessageFrom(rawServerSentEvent.data());
+                        || (!isNullOrBlank(rawEventData) && rawEventData.contains("\"error\""))) {
+                    String errorMessage = providerErrorMessageFrom(rawEventData);
                     if (errorMessage != null) {
                         providerErrorMessage.compareAndSet(null, errorMessage);
                     }
